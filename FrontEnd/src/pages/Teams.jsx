@@ -1,34 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Card from '../components/Card';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import TeamCard from '../components/TeamCard';
 import Skeleton from '../components/Skeleton';
 import { dummyTeams } from '../services/dummyData';
+import './Teams.css';
 
 const Teams = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [skillFilter, setSkillFilter] = useState('All Skills');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Simulate loading effect
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1500);
     return () => clearTimeout(timer);
   }, []);
 
-  const filteredTeams = dummyTeams.filter(team => 
-    team.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    team.hackathonName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    team.requiredSkills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const filteredTeams = dummyTeams.filter(team => {
+    const matchesSearch = team.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      team.hackathonName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      team.requiredSkills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesSkill = skillFilter === 'All Skills' ||
+      team.requiredSkills.some(s => s.toLowerCase().includes(skillFilter.toLowerCase()));
+    return matchesSearch && matchesSkill;
+  });
 
   return (
-    <div className="py-8 animate-fade-in">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+    <div className="teams">
+      {/* Header */}
+      <div className="teams__header">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Available Teams</h1>
-          <p className="text-gray-600 dark:text-gray-400">Discover teams looking for contributors or find partners for your next big idea.</p>
+          <p className="teams__label">Explore</p>
+          <h1 className="teams__title">Find Your Team</h1>
+          <p className="teams__desc">
+            Discover passionate developers and designers who are ready to build something extraordinary.
+          </p>
         </div>
         <Link to="/create-team">
           <Button size="md">
@@ -37,58 +44,73 @@ const Teams = () => {
         </Link>
       </div>
 
-      {/* Filters and Search */}
-      <Card className="p-4 mb-10">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-grow">
-            <Input 
-              placeholder="Search by hackathon or skills..." 
-              id="search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <div className="flex gap-4">
-            <select className="px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
-              <option>All Skills</option>
-              <option>Frontend</option>
-              <option>Backend</option>
-              <option>UI/UX</option>
-              <option>AI/ML</option>
-            </select>
-          </div>
+      {/* Filters Bar */}
+      <div className="teams__filters">
+        <div className="teams__search-wrapper">
+          <Input
+            placeholder="Search by name, hackathon or skill..."
+            id="search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-      </Card>
+        <div className="teams__filter-controls">
+          <select
+            value={skillFilter}
+            onChange={(e) => setSkillFilter(e.target.value)}
+            className="teams__select"
+          >
+            <option>All Skills</option>
+            <option>Frontend</option>
+            <option>Backend</option>
+            <option>UI/UX</option>
+            <option>AI/ML</option>
+            <option>Blockchain</option>
+          </select>
+        </div>
+      </div>
 
-      {/* Teams Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Meta Info */}
+      {!isLoading && (
+        <p className="teams__meta">
+          Showing <span className="teams__meta-count">{filteredTeams.length}</span> teams
+        </p>
+      )}
+
+      {/* Grid */}
+      <div className="teams__grid">
         {isLoading ? (
-          // Show 6 skeleton cards while loading
           [...Array(6)].map((_, index) => (
-            <Card key={index} className="p-6 h-[320px] flex flex-col justify-between">
-              <div>
-                <Skeleton variant="rectangular" className="w-20 h-6 mb-4" />
-                <Skeleton variant="text" className="h-8 w-3/4 mb-2" />
-                <Skeleton variant="text" className="w-1/2 mb-4" />
-                <Skeleton variant="text" className="mb-2" />
-                <Skeleton variant="text" className="mb-2" />
-                <Skeleton variant="text" className="w-2/3" />
+            <div key={index} className="teams__skeleton-card">
+              <div className="teams__skeleton-header">
+                <Skeleton variant="rectangular" className="w-16 h-7 rounded-full" />
+                <Skeleton variant="rectangular" className="w-20 h-7 rounded-full" />
               </div>
-              <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
-                <Skeleton variant="rectangular" className="w-full h-10" />
+              <Skeleton variant="text" className="h-8 w-3/4 mt-4" />
+              <Skeleton variant="text" className="h-4 w-1/2" />
+              <Skeleton variant="text" className="h-4" />
+              <Skeleton variant="text" className="h-4" />
+              <Skeleton variant="text" className="h-4 w-2/3" />
+              <div className="teams__skeleton-skills">
+                {[...Array(3)].map((_, i) => (
+                  <Skeleton key={i} variant="rectangular" className="w-16 h-7 rounded-lg" />
+                ))}
               </div>
-            </Card>
+            </div>
+          ))
+        ) : filteredTeams.length > 0 ? (
+          filteredTeams.map((team) => (
+            <TeamCard key={team.id} team={team} />
           ))
         ) : (
-          filteredTeams.length > 0 ? (
-            filteredTeams.map((team) => (
-              <TeamCard key={team.id} team={team} />
-            ))
-          ) : (
-            <div className="col-span-full text-center py-20">
-              <p className="text-gray-500 italic text-xl">No teams found matching your search.</p>
-            </div>
-          )
+          <div className="teams__empty">
+            <div className="teams__empty-icon">🔍</div>
+            <h3 className="teams__empty-title">No teams found</h3>
+            <p className="teams__empty-desc">Try adjusting your search or browse all available teams.</p>
+            <Button variant="secondary" onClick={() => { setSearchTerm(''); setSkillFilter('All Skills'); }}>
+              Clear Filters
+            </Button>
+          </div>
         )}
       </div>
     </div>

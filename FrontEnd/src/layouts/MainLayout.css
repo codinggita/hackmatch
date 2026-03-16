@@ -1,0 +1,30 @@
+/* ═══════════════════════════════════════════════
+   MainLayout Styles
+   ═══════════════════════════════════════════════ */
+
+.main-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #0f172a;
+  color: #fff;
+}
+
+.main-layout::selection {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+.main-layout__bg-mesh {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: #0f172a;
+  background-image:
+    radial-gradient(ellipse at 20% 10%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
+}
+
+.main-layout__content {
+  flex-grow: 1;
+}

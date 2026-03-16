@@ -1,107 +1,107 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import Card from '../components/Card';
+import { useAuth } from '../services/AuthContext';
+import './Signup.css';
 
 const Signup = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Signup attempt:', formData);
-    // Logic will be added in later phases
+    setLoading(true);
+    setTimeout(() => {
+      login('dummy-token');
+      navigate('/');
+      setLoading(false);
+    }, 1000);
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 py-8">
-      <Card className="w-full max-w-md p-8">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Create Account</h2>
-          <p className="text-gray-600 dark:text-gray-400">Join HackMatch to find your team</p>
-        </div>
+    <div className="signup">
+      {/* Background glows */}
+      <div className="signup__glow--indigo"></div>
+      <div className="signup__glow--cyan"></div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Full Name"
-            id="name"
-            type="text"
-            placeholder="John Doe"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-
-          <Input
-            label="Email Address"
-            id="email"
-            type="email"
-            placeholder="name@example.com"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-
-          <Input
-            label="Password"
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-
-          <Input
-            label="Confirm Password"
-            id="confirmPassword"
-            type="password"
-            placeholder="••••••••"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-          />
-
-          <div className="flex items-start pt-2">
-            <div className="flex items-center h-5">
-              <input
-                id="terms"
-                type="checkbox"
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                required
-              />
+      <div className="signup__wrapper">
+        {/* Logo header */}
+        <div className="signup__logo-header">
+          <Link to="/" className="signup__logo">
+            <div className="signup__logo-icon">
+              <span className="signup__logo-letter">H</span>
             </div>
-            <label htmlFor="terms" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
-              I agree to the{' '}
-              <a href="#" className="text-blue-600 hover:underline">Terms of Service</a> and{' '}
-              <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a>
-            </label>
-          </div>
-
-          <Button type="submit" className="w-full mt-4" size="lg">
-            Sign Up
-          </Button>
-        </form>
-
-        <div className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
-          Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:text-blue-700 font-semibold hover:underline">
-            Log in
+            <span className="signup__logo-text">HackMatch</span>
           </Link>
+          <h1 className="signup__heading">Join the community</h1>
+          <p className="signup__subheading">Create your account and find your team</p>
         </div>
-      </Card>
+
+        {/* Card */}
+        <div className="signup__card">
+          <form onSubmit={handleSubmit} className="signup__form">
+            <Input
+              label="Full Name"
+              id="name"
+              placeholder="John Doe"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+            <Input
+              label="Email Address"
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            <Input
+              label="Password"
+              id="password"
+              type="password"
+              placeholder="Min. 8 characters"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            <Input
+              label="Confirm Password"
+              id="confirmPassword"
+              type="password"
+              placeholder="Re-enter your password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+            <p className="signup__terms">
+              By creating an account, you agree to our{' '}
+              <a href="#" className="signup__terms-link">Terms of Service</a> and{' '}
+              <a href="#" className="signup__terms-link">Privacy Policy</a>.
+            </p>
+            <Button type="submit" className="signup__submit" isLoading={loading} size="md">
+              Create My Account
+            </Button>
+          </form>
+
+          <div className="signup__footer">
+            <p className="signup__footer-text">
+              Already have an account?{' '}
+              <Link to="/login" className="signup__footer-link">
+                Sign in →
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

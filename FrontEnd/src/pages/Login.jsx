@@ -1,48 +1,61 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import Card from '../components/Card';
+import { useAuth } from '../services/AuthContext';
+import './Login.css';
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Login attempt:', formData);
-    // Logic will be added in later phases
+    setLoading(true);
+    setTimeout(() => {
+      login('dummy-token');
+      navigate('/');
+      setLoading(false);
+    }, 1000);
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4">
-      <Card className="w-full max-w-md p-8">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Welcome Back</h2>
-          <p className="text-gray-600 dark:text-gray-400">Log in to your HackMatch account</p>
+    <div className="login">
+      {/* Background glows */}
+      <div className="login__glow--blue"></div>
+      <div className="login__glow--purple"></div>
+
+      <div className="login__wrapper">
+        {/* Logo header */}
+        <div className="login__logo-header">
+          <Link to="/" className="login__logo">
+            <div className="login__logo-icon">
+              <span className="login__logo-letter">H</span>
+            </div>
+            <span className="login__logo-text">HackMatch</span>
+          </Link>
+          <h1 className="login__heading">Welcome back</h1>
+          <p className="login__subheading">Sign in to find your next team</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <Input
-            label="Email Address"
-            id="email"
-            type="email"
-            placeholder="name@example.com"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-
-          <div className="space-y-1">
+        {/* Card */}
+        <div className="login__card">
+          <form onSubmit={handleSubmit} className="login__form">
+            <Input
+              label="Email Address"
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
             <Input
               label="Password"
               id="password"
@@ -52,37 +65,28 @@ const Login = () => {
               onChange={handleChange}
               required
             />
-            <div className="text-right">
-              <Link to="/forgot-password" size="sm" className="text-sm text-blue-600 hover:text-blue-700 hover:underline">
-                Forgot password?
-              </Link>
+            <div className="login__extras">
+              <label className="login__remember">
+                <input type="checkbox" className="login__remember-checkbox" />
+                <span className="login__remember-text">Remember me</span>
+              </label>
+              <a href="#" className="login__forgot">Forgot password?</a>
             </div>
+            <Button type="submit" className="login__submit" isLoading={loading} size="md">
+              Sign In to HackMatch
+            </Button>
+          </form>
+
+          <div className="login__footer">
+            <p className="login__footer-text">
+              Don't have an account?{' '}
+              <Link to="/signup" className="login__footer-link">
+                Create one free →
+              </Link>
+            </p>
           </div>
-
-          <div className="flex items-center">
-            <input
-              id="remember-me"
-              name="remember-me"
-              type="checkbox"
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            />
-            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
-              Remember me
-            </label>
-          </div>
-
-          <Button type="submit" className="w-full" size="lg">
-            Sign In
-          </Button>
-        </form>
-
-        <div className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
-          Don't have an account?{' '}
-          <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-semibold hover:underline">
-            Create an account
-          </Link>
         </div>
-      </Card>
+      </div>
     </div>
   );
 };

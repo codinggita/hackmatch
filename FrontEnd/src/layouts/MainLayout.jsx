@@ -2,13 +2,17 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import './MainLayout.css';
 
 const MainLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="main-layout">
+      {/* Background Mesh */}
+      <div className="main-layout__bg-mesh"></div>
+      
       <Navbar />
       
-      <main className="flex-grow container mx-auto p-4">
+      <main className="main-layout__content">
         <Outlet />
       </main>
       

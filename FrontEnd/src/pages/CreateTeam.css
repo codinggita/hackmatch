@@ -1,0 +1,125 @@
+/* ═══════════════════════════════════════════════
+   CreateTeam Page Styles
+   ═══════════════════════════════════════════════ */
+
+.create-team {
+  padding: 4rem 1.5rem;
+  max-width: 42rem;
+  margin: 0 auto;
+  animation: fadeIn 0.7s ease-out forwards;
+}
+
+/* ── Header ── */
+.create-team__header {
+  margin-bottom: 3rem;
+}
+
+.create-team__label {
+  color: #3b82f6;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
+.create-team__title {
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.create-team__desc {
+  color: #9ca3af;
+}
+
+/* ── Form Card ── */
+.create-team__card {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+}
+
+.create-team__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* ── Textarea ── */
+.create-team__textarea-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.create-team__textarea-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #9ca3af;
+  letter-spacing: 0.025em;
+}
+
+.create-team__textarea-required {
+  color: #3b82f6;
+}
+
+.create-team__textarea {
+  padding: 0.875rem 1.25rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  outline: none;
+  resize: none;
+  font-family: inherit;
+}
+
+.create-team__textarea::placeholder {
+  color: #4b5563;
+}
+
+.create-team__textarea:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.create-team__textarea:focus {
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+}
+
+/* ── Two-column layout ── */
+.create-team__row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .create-team__row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Actions ── */
+.create-team__actions {
+  padding-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.create-team__submit {
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+.create-team__cancel {
+  padding: 1rem 1.5rem;
+}
