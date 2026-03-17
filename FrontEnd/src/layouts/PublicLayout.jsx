@@ -4,7 +4,12 @@ import { useAuth } from '../services/AuthContext';
 import './PublicLayout.css';
 
 const PublicLayout = () => {
-  const { isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+
+  const getInitials = (name) => {
+    if (!name) return 'U';
+    return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+  };
 
   return (
     <div className="public-layout">
@@ -32,7 +37,7 @@ const PublicLayout = () => {
                 Go to App →
               </Link>
               <Link to="/app/profile" className="public-nav__avatar">
-                JD
+                {user ? getInitials(user.name) : 'U'}
               </Link>
             </>
           ) : (

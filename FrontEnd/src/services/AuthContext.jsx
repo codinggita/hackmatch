@@ -63,6 +63,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateProfile = async (profileData) => {
+    try {
+      const response = await api.put('/users/profile', profileData);
+      if (response.data.success) {
+        setUser(prev => ({ ...prev, ...response.data.data }));
+        return { success: true };
+      }
+    } catch (error) {
+      return { success: false, message: error.response?.data?.message || 'Update failed' };
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     setIsAuthenticated(false);
@@ -70,7 +82,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, login, register, logout, updateProfile, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );
