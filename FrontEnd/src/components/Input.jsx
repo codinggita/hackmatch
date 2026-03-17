@@ -1,4 +1,5 @@
 import React from 'react';
+import './Input.css';
 
 const Input = ({ 
   label, 
@@ -11,20 +12,20 @@ const Input = ({
   ...props 
 }) => {
   return (
-    <div className={`flex flex-col gap-1.5 ${className}`}>
+    <div className={`input-group ${className}`}>
       {label && (
-        <label htmlFor={id} className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-          {label} {required && <span className="text-red-500">*</span>}
+        <label htmlFor={id} className="input-group__label">
+          {label} {required && <span className="input-group__required">*</span>}
         </label>
       )}
       <input
         id={id}
         type={type}
         placeholder={placeholder}
-        className={`px-4 py-2.5 bg-white dark:bg-gray-800 border ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500'} rounded-lg transition-all focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed dark:text-white`}
+        className={`input-group__field ${error ? 'input-group__field--error' : ''}`}
         {...props}
       />
-      {error && <span className="text-xs text-red-500">{error}</span>}
+      {error && <span className="input-group__error"><span>⚠️</span> {error}</span>}
     </div>
   );
 };

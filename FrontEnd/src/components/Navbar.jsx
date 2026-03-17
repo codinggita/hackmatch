@@ -1,61 +1,131 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../services/AuthContext';
+import './Navbar.css';
 
 const Navbar = () => {
+  const { logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navLinks = [
+    { name: 'Browse Teams', path: '/app/teams' },
+    { name: 'Create Team', path: '/app/create-team' },
+  ];
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-bold text-blue-600 tracking-tight">HackMatch</span>
-            </Link>
-            <div className="hidden md:ml-10 md:flex md:space-x-8">
-              <Link to="/teams" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 text-sm font-medium transition">
-                Browse Teams
-              </Link>
-              <Link to="/create-team" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 text-sm font-medium transition">
-                Create Team
-              </Link>
+    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : 'navbar--transparent'}`}>
+      <div className="navbar__container">
+        <div className="navbar__inner">
+          {/* Logo */}
+          <Link to="/" className="navbar__logo">
+            <div className="navbar__logo-icon">
+              <span className="navbar__logo-letter">H</span>
             </div>
+            <span className="navbar__logo-text">
+              Hack<span className="navbar__logo-highlight">Match</span>
+            </span>
+          </Link>
+
+          {/* Desktop Nav Links */}
+          <div className="navbar__links">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`navbar__link ${
+                  location.pathname === link.path
+                    ? 'navbar__link--active'
+                    : 'navbar__link--inactive'
+                }`}
+              >
+                {link.name}
+              </Link>
+            ))}
           </div>
-          <div className="hidden md:flex items-center space-x-4">
-            <Link to="/login" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 px-3 py-2 text-sm font-medium transition">
-              Login
+
+          {/* User Actions */}
+          <div className="navbar__actions">
+            <Link to="/app/profile" className="navbar__profile-link">
+              <div className="navbar__avatar">
+                <span className="navbar__avatar-initials">JD</span>
+              </div>
+              <div className="navbar__profile-details">
+                <p className="navbar__profile-name">John Doe</p>
+                <p className="navbar__profile-subtitle">View Profile</p>
+              </div>
             </Link>
-            <Link to="/signup" className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition">
-              Sign Up
-            </Link>
-            <Link to="/profile" className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 border border-blue-200 dark:border-blue-800 hover:bg-blue-200 transition">
-              <span className="font-bold text-sm">JD</span>
-            </Link>
-          </div>
-          <div className="flex items-center md:hidden">
             <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+              onClick={logout}
+              className="navbar__logout-btn"
+              title="Logout"
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                {isOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
             </button>
           </div>
+
+          {/* Mobile Hamburger */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="navbar__hamburger"
+          >
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {isOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
         </div>
       </div>
 
+      {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link to="/teams" className="block text-gray-700 dark:text-gray-300 px-3 py-2 rounded-md text-base font-medium">Browse Teams</Link>
-            <Link to="/create-team" className="block text-gray-700 dark:text-gray-300 px-3 py-2 rounded-md text-base font-medium">Create Team</Link>
-            <Link to="/login" className="block text-gray-700 dark:text-gray-300 px-3 py-2 rounded-md text-base font-medium">Login</Link>
-            <Link to="/signup" className="block bg-blue-600 text-white px-3 py-2 rounded-md text-base font-medium mt-2">Sign Up</Link>
+        <div className="navbar__mobile-menu">
+          <div className="navbar__mobile-menu-inner">
+            <div className="navbar__mobile-links">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  onClick={() => setIsOpen(false)}
+                  className="navbar__mobile-link"
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </div>
+            <div className="navbar__mobile-divider">
+              <Link
+                to="/app/profile"
+                onClick={() => setIsOpen(false)}
+                className="navbar__mobile-profile"
+              >
+                <div className="navbar__mobile-avatar">
+                  <span>JD</span>
+                </div>
+                <div>
+                  <p className="navbar__mobile-profile-name">John Doe</p>
+                  <p className="navbar__mobile-profile-sub">Manage Profile</p>
+                </div>
+              </Link>
+              <button
+                onClick={() => { logout(); setIsOpen(false); }}
+                className="navbar__mobile-logout"
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       )}

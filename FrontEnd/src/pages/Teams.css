@@ -1,0 +1,194 @@
+/* ═══════════════════════════════════════════════
+   Teams Page Styles
+   ═══════════════════════════════════════════════ */
+
+.teams {
+  padding: 4rem 1.5rem;
+  max-width: 80rem;
+  margin: 0 auto;
+  animation: fadeIn 0.7s ease-out forwards;
+}
+
+/* ── Header ── */
+.teams__header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+@media (min-width: 768px) {
+  .teams__header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+.teams__label {
+  color: #3b82f6;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
+.teams__title {
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .teams__title {
+    font-size: 3rem;
+  }
+}
+
+.teams__desc {
+  color: #9ca3af;
+  font-size: 1.125rem;
+  max-width: 32rem;
+}
+
+/* ── Filters Bar ── */
+.teams__filters {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .teams__filters {
+    flex-direction: row;
+  }
+}
+
+.teams__search-wrapper {
+  flex-grow: 1;
+}
+
+.teams__filter-controls {
+  display: flex;
+  gap: 1rem;
+}
+
+.teams__select {
+  padding: 0.875rem 1.25rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+  min-width: 140px;
+  transition: border-color 0.2s ease;
+}
+
+.teams__select:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+}
+
+.teams__select:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.teams__select option {
+  background: #1e293b;
+}
+
+/* ── Meta Info ── */
+.teams__meta {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+  padding-left: 0.25rem;
+}
+
+.teams__meta-count {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ── Grid ── */
+.teams__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .teams__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .teams__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ── Skeleton Cards ── */
+.teams__skeleton-card {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  height: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.teams__skeleton-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.teams__skeleton-skills {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+/* ── Empty State ── */
+.teams__empty {
+  grid-column: 1 / -1;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1.5rem;
+  padding: 4rem;
+  text-align: center;
+}
+
+.teams__empty-icon {
+  font-size: 3.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.teams__empty-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.teams__empty-desc {
+  color: #6b7280;
+  margin-bottom: 2rem;
+}
