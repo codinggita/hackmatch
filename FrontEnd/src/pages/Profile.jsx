@@ -3,13 +3,17 @@ import Card from '../components/Card';
 import Button from '../components/Button';
 import Skeleton from '../components/Skeleton';
 import { useAuth } from '../services/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import EditProfileModal from '../components/EditProfileModal';
 import './Profile.css';
 
 const Profile = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [userTeams, setUserTeams] = useState([]);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
     const fetchUserTeams = async () => {
@@ -64,7 +68,7 @@ const Profile = () => {
                 <h2 className="profile__name">{user.name}</h2>
                 <p className="profile__email">{user.email}</p>
                 <div className="profile__actions">
-                  <Button size="sm" variant="secondary">Edit Profile</Button>
+                  <Button size="sm" variant="secondary" onClick={() => setShowEditModal(true)}>Edit Profile</Button>
                   <Button size="sm" variant="outline" onClick={logout}>Logout</Button>
                 </div>
               </>
@@ -163,19 +167,20 @@ const Profile = () => {
                       <p className="profile__project-members-count">{team.members.length}</p>
                       <p className="profile__project-members-label">Members</p>
                     </div>
-                    <Button variant="secondary" size="sm">Manage</Button>
+                    <Button variant="secondary" size="sm" onClick={() => alert("Manage team functionality coming soon!")}>Manage</Button>
                   </div>
                 </Card>
               ))
             ) : (
               <div className="profile__empty">
                 <p className="profile__empty-text">You haven't joined any teams yet.</p>
-                <Button variant="outline" size="sm" className="mt-4">Browse Teams</Button>
+                <Button variant="outline" size="sm" className="mt-4" onClick={() => navigate('/app/teams')}>Browse Teams</Button>
               </div>
             )}
           </div>
         </div>
       </div>
+      {showEditModal && <EditProfileModal onClose={() => setShowEditModal(false)} />}
     </div>
   );
 };

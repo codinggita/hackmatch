@@ -5,7 +5,21 @@ import Button from './Button';
 import './TeamCard.css';
 
 const TeamCard = ({ team }) => {
-  const { id, name, hackathonName, projectIdea, requiredSkills, members, membersNeeded, status } = team;
+  if (!team) return null;
+
+  // Map backend schema matching
+  const id = team._id || team.id;
+  const name = team.teamName || team.name || 'Unnamed Team';
+  const hackathonName = team.hackathonName || 'Open Hackathon';
+  const projectIdea = team.projectIdea || 'No idea provided';
+  const requiredSkills = team.requiredSkills || [];
+  const members = team.members || [];
+  
+  // Backend doesn't support these natively yet, providing defaults
+  const membersNeeded = team.membersNeeded || 4;
+  const status = team.status || 'Open';
+
+  const unfilledSpots = Math.max(0, membersNeeded - members.length);
 
   return (
     <Card hover className="team-card">
@@ -17,13 +31,13 @@ const TeamCard = ({ team }) => {
         </div>
         <div className="team-card__members">
           <div className="team-card__avatars">
-            {[...Array(members.length)].map((_, i) => (
-              <div key={i} className="team-card__avatar team-card__avatar--filled">
+            {members.map((_, i) => (
+              <div key={`filled-${i}`} className="team-card__avatar team-card__avatar--filled">
                 U
               </div>
             ))}
-            {[...Array(membersNeeded - members.length)].map((_, i) => (
-              <div key={i} className="team-card__avatar team-card__avatar--empty">
+            {[...Array(unfilledSpots)].map((_, i) => (
+              <div key={`empty-${i}`} className="team-card__avatar team-card__avatar--empty">
                 +
               </div>
             ))}

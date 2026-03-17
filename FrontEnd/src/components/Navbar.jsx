@@ -4,10 +4,15 @@ import { useAuth } from '../services/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+
+  const getInitials = (name) => {
+    if (!name) return 'U';
+    return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -55,10 +60,10 @@ const Navbar = () => {
           <div className="navbar__actions">
             <Link to="/app/profile" className="navbar__profile-link">
               <div className="navbar__avatar">
-                <span className="navbar__avatar-initials">JD</span>
+                <span className="navbar__avatar-initials">{user ? getInitials(user.name) : 'U'}</span>
               </div>
               <div className="navbar__profile-details">
-                <p className="navbar__profile-name">John Doe</p>
+                <p className="navbar__profile-name">{user ? user.name : 'User'}</p>
                 <p className="navbar__profile-subtitle">View Profile</p>
               </div>
             </Link>
@@ -112,10 +117,10 @@ const Navbar = () => {
                 className="navbar__mobile-profile"
               >
                 <div className="navbar__mobile-avatar">
-                  <span>JD</span>
+                  <span>{user ? getInitials(user.name) : 'U'}</span>
                 </div>
                 <div>
-                  <p className="navbar__mobile-profile-name">John Doe</p>
+                  <p className="navbar__mobile-profile-name">{user ? user.name : 'User'}</p>
                   <p className="navbar__mobile-profile-sub">Manage Profile</p>
                 </div>
               </Link>

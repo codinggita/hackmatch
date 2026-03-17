@@ -32,11 +32,17 @@ const Teams = () => {
   }, []);
 
   const filteredTeams = teams.filter(team => {
-    const matchesSearch = team.teamName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      team.hackathonName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      team.requiredSkills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
+    const tName = team.teamName || '';
+    const hName = team.hackathonName || '';
+    const skills = team.requiredSkills || [];
+
+    const matchesSearch = tName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      hName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
+      
     const matchesSkill = skillFilter === 'All Skills' ||
-      team.requiredSkills.some(s => s.toLowerCase().includes(skillFilter.toLowerCase()));
+      skills.some(s => s.toLowerCase().includes(skillFilter.toLowerCase()));
+      
     return matchesSearch && matchesSkill;
   });
 
